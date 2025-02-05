@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VPN Expert</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg width='32' height='40' viewBox='0 0 32 40' fill='none' xmlns='http://www.w3.org/2000/svg'> <path d='M16.1186 2.21684L16.1186 2.21687L30.7836 7.13853C30.9126 7.18184 30.9997 7.30284 30.9997 7.43922V19.7375C30.9997 28.3316 25.0536 35.9805 16.1106 38.7168C16.0803 38.726 16.0491 38.7306 16.018 38.7306C15.987 38.7306 15.9558 38.726 15.9253 38.7167C6.98236 35.9804 1.03633 28.3316 1.03633 19.7375V7.00459C1.03633 6.86494 1.12746 6.74199 1.26044 6.70127C1.26046 6.70127 1.26047 6.70126 1.26048 6.70126L15.9255 2.21428L15.9257 2.21421C15.9886 2.19494 16.056 2.19582 16.1186 2.21684Z' fill='%2304AFD4'/></svg>">
+    <style>
+        body {
+            background: url('https://vpn-expert.com/images/front/pictures/sing-bg.jpg') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        form {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+        }
+        input, button {
+            padding: 10px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+        }
+        input {
+            width: 80%;
+        }
+        button {
+            background-color: #04AFD4;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #038ca4;
+        }
+        #errorMessage {
+            color: red;
+            display: none;
+        }
+        #successMessage {
+            color: green;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>VPN Expert</h1>
+    <p>Please enter your email to delete your account and associated data</p>
+    <form id="emailForm" action="https://formspree.io/f/mrbelzbz" method="POST">
+        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+        <button type="submit">Submit</button>
+        <p id="errorMessage">Invalid email</p>
+        <p id="successMessage">Your account deletion request was received. The account will be deleted in 3 days.</p>
+    </form>
+    <script>
+        document.getElementById('emailForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            let form = this;
+            let emailInput = document.getElementById('email');
+            let errorMessage = document.getElementById('errorMessage');
+            let successMessage = document.getElementById('successMessage');
+            
+            let emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            if (!emailPattern.test(emailInput.value)) {
+                errorMessage.style.display = 'block';
+                return;
+            }
+            errorMessage.style.display = 'none';
+
+            fetch(form.action, {
+                method: 'POST',
+                body: new FormData(form),
+                headers: { Accept: 'application/json' }
+            })
+            .then(response => {
+                if (response.ok) {
+                    form.reset();
+                    successMessage.style.display = 'block';
+                } else {
+                    alert('There was a problem with your submission. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('There was a problem with your submission. Please try again.');
+            });
+        });
+    </script>
+</body>
+</html>
